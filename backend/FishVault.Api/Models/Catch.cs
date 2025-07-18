@@ -13,4 +13,8 @@ using System.ComponentModel.DataAnnotations;
         public string Notes { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public User? User { get; set; } = null!;
+
+        // Relationships
+        public int? FishingTripId { get; set; }
+        public FishingTrip? FishingTrip { get; set; } = null!;
     }
