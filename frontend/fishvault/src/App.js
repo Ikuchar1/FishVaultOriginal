@@ -8,7 +8,9 @@ function App() {
   const [newCatch, setNewCatch] = useState({
     species: '',
     length: '',
-    weight: ''
+    weight: '',
+    location: '',
+    notes: ''
   });
 
   useEffect(() => {

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using FishVault.Api.Data;
 using FishVault.Api.Models;
+using FishVault.Api.Migrations;
 
 namespace FishVault.Api.Controllers
 {
@@ -47,8 +48,23 @@ namespace FishVault.Api.Controllers
                 return BadRequest();
             }
 
+            var user = _context.Users.Find(fishingTrip.UserId);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            // fishingTrip.User = user;
+
             _context.FishingTrips.Add(fishingTrip);
-            _context.SaveChanges();
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Save failed: {ex.Message} - {ex.InnerException?.Message}");
+            }
 
             return CreatedAtAction(nameof(GetFishingTrip), new { id = fishingTrip.Id }, fishingTrip);
         }

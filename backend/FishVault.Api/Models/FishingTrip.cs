@@ -8,7 +8,7 @@ namespace FishVault.Api.Models
         public string Location { get; set; } = string.Empty;
         public string Notes { get; set; } = string.Empty;
         //relationships
-        public User? User { get; set; } = null!;
+        public User? User { get; set; }
         public List<Catch> Catches { get; set; } = new List<Catch>();
 
     }

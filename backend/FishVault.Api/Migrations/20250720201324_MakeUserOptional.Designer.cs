@@ -3,6 +3,7 @@ using System;
 using FishVault.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FishVault.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250720201324_MakeUserOptional")]
+    partial class MakeUserOptional
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -125,7 +128,7 @@ namespace FishVault.Api.Migrations
 
             modelBuilder.Entity("FishVault.Api.Models.Catch", b =>
                 {
-                    b.HasOne("FishVault.Api.Models.FishingTrip", null)
+                    b.HasOne("FishVault.Api.Models.FishingTrip", "FishingTrip")
                         .WithMany("Catches")
                         .HasForeignKey("FishingTripId");
 
@@ -134,6 +137,8 @@ namespace FishVault.Api.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("FishingTrip");
 
                     b.Navigation("User");
                 });
