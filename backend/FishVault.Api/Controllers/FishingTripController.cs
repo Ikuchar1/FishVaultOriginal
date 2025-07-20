@@ -71,8 +71,7 @@ namespace FishVault.Api.Controllers
 
             // Update only the properties that exist
             existingTrip.Location = fishingTrip.Location;
-            existingTrip.StartTime = fishingTrip.StartTime;
-            existingTrip.EndTime = fishingTrip.EndTime;
+            existingTrip.TripDate = fishingTrip.TripDate;
             existingTrip.Notes = fishingTrip.Notes;
             // If you want to update Catches, handle it separately
 
