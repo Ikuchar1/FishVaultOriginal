@@ -35,7 +35,7 @@ namespace FishVault.Api.Controllers
         //     return CreatedAtAction(nameof(GetUsers), new { id = user.Id }, user);
         // }
 
-        [HttpPost]
+        [HttpPost("register")]
         public IActionResult Register([FromBody] RegisterDto registerDto)
         {
             if (registerDto == null)
@@ -76,9 +76,14 @@ namespace FishVault.Api.Controllers
                 return NotFound("User not found.");
             }
 
+            Console.WriteLine(logindto.Email);
+            Console.WriteLine(logindto.Password);
+            Console.WriteLine(user.PasswordHash);
+
             bool isPasswordValid = BCrypt.Net.BCrypt.Verify(logindto.Password, user.PasswordHash);
             if (!isPasswordValid)
             {
+
                 return Unauthorized("Invalid password.");
             }
 

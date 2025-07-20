@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { on } from '../node_modules/eslint-plugin-import/lib/rules/prefer-default-export';
 
 function App() {
 
@@ -12,6 +11,9 @@ function App() {
     location: '',
     notes: ''
   });
+  const [user, setUser] = useState(null);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   useEffect(() => {
     axios.get('http://localhost:5002/api/catch')
@@ -21,6 +23,12 @@ function App() {
       .catch(error => {
         console.error('Error fetching catches:', error);
       });
+
+      const savedUser = localStorage.getItem('user');
+      if (savedUser) {
+        setUser(JSON.parse(savedUser));
+      }
+
   }, []);
 
   const addCatch = (catchData) => {
@@ -45,9 +53,55 @@ function App() {
       });
   };
 
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post('http://localhost:5002/api/users/login', {
+        email,
+        password
+      });
+
+      console.log('Login Successful:', response.data);
+      localStorage.setItem('user', JSON.stringify(response.data));
+      setUser(response.data);
+
+    } catch (error) {
+      console.error('Login Failed:', error.response?.data || error.message);
+    }
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    setUser(null);
+  };
+
   return (
     <div className="App">
-      <h1>FishVault Catches</h1>
+
+      <h1>FishVault</h1>
+      {user === null ? (
+        <div>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+          />
+          <button onClick={handleLogin}>Login</button>
+        </div>
+      ) : (
+        <div>
+          <h2>Welcome, {user.name}!</h2>
+          <button onClick={handleLogout}>Logout</button>
+        </div>
+      )}
+
+      <h1>Your Catches</h1>
       <ul>
         {catches.map(catchItem => (
           <li key={catchItem.id}>
