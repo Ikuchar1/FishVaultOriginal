@@ -80,6 +80,17 @@ namespace FishVault.Api.Controllers
             Console.WriteLine(logindto.Password);
             Console.WriteLine(user.PasswordHash);
 
+            Console.WriteLine($"🔐 Plain Password: {logindto.Password}");
+            Console.WriteLine($"🔐 Stored Hash: {user.PasswordHash}");
+
+            // Generate a new hash from the login password to compare formatting
+            string testHash = BCrypt.Net.BCrypt.HashPassword(logindto.Password);
+            Console.WriteLine($"🔐 New Hash from login password: {testHash}");
+
+            // Check if the hash formats match (they should start with $2b$ or $2a$)
+            Console.WriteLine($"🔍 Hash prefix match? {user.PasswordHash.Substring(0, 4) == testHash.Substring(0, 4)}");
+
+
             bool isPasswordValid = BCrypt.Net.BCrypt.Verify(logindto.Password, user.PasswordHash);
             if (!isPasswordValid)
             {

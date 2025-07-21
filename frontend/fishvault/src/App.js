@@ -16,20 +16,23 @@ function App() {
   const [password, setPassword] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:5002/api/catch')
-      .then(response => {
-        setCaches(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching catches:', error);
-      });
-
-      const savedUser = localStorage.getItem('user');
-      if (savedUser) {
-        setUser(JSON.parse(savedUser));
-      }
-
+    const savedUser = localStorage.getItem('user');
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    }
   }, []);
+
+  useEffect(() => {
+    if (user && user.id) {
+      axios.get(`http://localhost:5002/api/catch/user/${user.id}`)
+        .then(response => {
+          setCaches(response.data);
+        })
+        .catch(error => {
+          console.error('Error fetching catches:', error);
+        });
+    }
+  }, [user]);
 
   const addCatch = (catchData) => {
     axios.post('http://localhost:5002/api/catch', catchData)
@@ -64,6 +67,9 @@ function App() {
       localStorage.setItem('user', JSON.stringify(response.data));
       setUser(response.data);
 
+      const catchesResponse = await axios.get(`http://localhost:5002/api/catch/user/${response.data.id}`);
+      setCaches(catchesResponse.data);
+
     } catch (error) {
       console.error('Login Failed:', error.response?.data || error.message);
     }
@@ -72,6 +78,8 @@ function App() {
   const handleLogout = () => {
     localStorage.removeItem('user');
     setUser(null);
+
+    setCaches([]);
   };
 
   return (
@@ -115,7 +123,7 @@ function App() {
       <form onSubmit={e => {
         e.preventDefault();
         addCatch({
-          userId: 1,
+          userId: user ? user.id : null,
           species: newCatch.species,
           length: parseFloat(newCatch.length),
           weight: parseFloat(newCatch.weight),

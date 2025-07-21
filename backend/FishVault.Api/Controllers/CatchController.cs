@@ -18,13 +18,21 @@ namespace FishVault.Api.Controllers
         // GET: api/catch
         [HttpGet]
         [Route("")]
-        public IActionResult GetCatches()
+        public IActionResult GetCatch()
         {
             var catches = _context.Catches.ToList();
             return Ok(catches);
         }
 
-        // GET: api/catches/{id}
+        // GET: api/catch/user/{userId}
+        [HttpGet("user/{userId}")]
+        public IActionResult GetUserCatches(int userId)
+        {
+            var userCatches = _context.Catches.Where(c => c.UserId == userId).ToList();
+            return Ok(userCatches);
+        }
+
+        // GET: api/catch/{id}
         [HttpGet("{id}")]
         public IActionResult GetCatch(int id)
         {
@@ -39,6 +47,11 @@ namespace FishVault.Api.Controllers
         [Route("")]
         public IActionResult CreateCatch(Catch catchItem)
         {
+            // Require userId to be present
+            if (catchItem.UserId == 0)
+            {
+                return Unauthorized("You must be logged in to add a catch.");
+            }
             catchItem.CreatedAt = DateTime.UtcNow;
             _context.Catches.Add(catchItem);
             _context.SaveChanges();
