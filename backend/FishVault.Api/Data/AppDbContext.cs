@@ -13,5 +13,4 @@ public class AppDbContext : DbContext
 
     public DbSet<User> Users { get; set; }
     public DbSet<Catch> Catches { get; set; }
-    public DbSet<FishingTrip> FishingTrips { get; set; }
 }
