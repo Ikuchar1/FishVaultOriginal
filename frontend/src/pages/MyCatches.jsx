@@ -1,11 +1,11 @@
 import { Card, Text, Button, Group, Title, Stack } from '@mantine/core'
 
-function Profile() {
+function MyCatches() {
   return (
     <div>
-      <Title order={2} mb="md">Profile</Title>
+      <Title order={2} mb="md">My Catches</Title>
     </div>
   )
 }
 
-export default Profile
+export default MyCatches

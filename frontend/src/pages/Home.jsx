@@ -1,7 +1,9 @@
+import { Card, Text, Button, Group, Title, Stack } from '@mantine/core'
+
 function Home() {
   return (
     <div>
-      <h2>Home</h2>
+      <Title order={2} mb="md">Home</Title>
     </div>
   )
 }
