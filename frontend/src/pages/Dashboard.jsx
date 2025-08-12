@@ -4,6 +4,7 @@ function Dashboard() {
   return (
     <div>
       <Title order={2} mb="md">Dashboard</Title>
+      <Text>This will show the user's fishing statistics and recent catches</Text>
     </div>
   )
 }
